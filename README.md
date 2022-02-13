@@ -1,7 +1,7 @@
-#CrypotCurrency Tracking App
-
+**#CrypotCurrency Tracking App**
+**
 Энэ application нь Coingecko Нээлттэй API-г ашиглан CrypotCurrency-ын бүхийл түүхэн мэдээллийг харуулна.
-Энэ website-ын Frontend дээр React.js, React-alice-carousel болон Matrial UI v4 ашигласан.
+Энэ website-ын Frontend дээр React.js, React-alice-carousel болон Matrial UI v4 ашигласан.**
 
 Цаашид энэ website-ийг илүү өргөжүүлэх болно.
 
