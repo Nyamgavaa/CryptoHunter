@@ -1,17 +1,21 @@
-import { Container, createTheme, LinearProgress, Table, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography } from '@material-ui/core';
+import { Container, createTheme, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography } from '@material-ui/core';
 import axios from 'axios';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import {useState} from "react";
+//import { Classnames } from 'react-alice-carousel';
 import { CoinList } from '../config/api';
 import { CryptoState } from '../CryptoContext';
-
+import { useNavigate } from 'react-router-dom';
+import {numberWithCommas} from '../Pages/Carousel'
+//useHistory react-router-dom v6 дээр өөрчлөгдөж useNavigate болсохн
 const CoinTable = () => {
 
 const [coins, setCoins] = useState([]);
 const [loading, setLoading] = useState(false);
-const [search, setSearch] = useState()
-
-const {currency} = CryptoState();
+const [search, setSearch] = useState("")
+const history = useNavigate()
+const {currency,symbol} = CryptoState();
 
 
     const fetchCoins = async () => {
@@ -21,6 +25,11 @@ const {currency} = CryptoState();
         setCoins(data);
         setLoading(false);
     }
+    //  const numberWidthCommas(x) {
+    //     // return x.toString().replace(/\B(?=(\d{3}) +(?!\d))/g, ",");
+    //     return x.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    // }
+    
     console.log(coins);
     useEffect(() => {
         fetchCoins();
@@ -30,57 +39,156 @@ const {currency} = CryptoState();
     const darkTheme = createTheme({
         palette: {
             primary:{
-                main: "#fff"
+                main: "#FFD700"
+            
 
             },
             type: "dark",
-        }
+        },
     });
-  return <ThemeProvider theme= {darkTheme}>
+
+    const handleSearch = () => {
+        return coins.filter(
+            (coin) => 
+                coin.name.toLowerCase().includes(search) ||
+                coin.symbol.toLowerCase().includes(search)
+        );
+    };
+
+    const useStyles = makeStyles(() => ({
+        row: {
+            backgroundColor: "#3c3",
+            cursor: "pointer",
+            "&:hover": {
+            backgroundColor: "#131111",
+            },
+            fontFamily: "Montserrat",
+
+        },
+    }));
+
+  //  const useStyles = makeStyles(() => ({}));
+
+    const classes = useStyles;
+
+  return ( 
+        <ThemeProvider theme= {darkTheme}>
         <Container style={{textAlign: "center"}}>
             <Typography
                 variant="h4"
-                color=""
                 style={{margin:18, fontFamily:"Montserrat"}}>
                 Cryptocurrency-ийн Зах зээлийн үнэлгээ
             </Typography>
-            <TextField label= "Crypto хөрөнгийн хайлтийн хэсэг"
-                       variant='outlined'
+            <TextField label= "Crypto хөрөнгийн хайлтийн хэсэг.."
+                       variant="outlined"
                        style={{marginBoottom:20, width: "100%"}}
                        onChange={(e) => setSearch(e.target.value)}
             />
             
-            <TableContainer>
-                {loading ? (
-                        <LinearProgress style={{backgroundColor:  "gold"}}/>
-                    ) : (
-                        <Table>
-                            <TableHead style = {{backgroundColor: "#EEBC1d"}}>
-                                <TableRow>
-                                    {["Койн","Үнэ","24 цагийн өөрчлөлт ", "Зах зээлийн үнэлгээ"].map((head)=>(
-                                        <TableCell
-                                            style={{
-                                                color:"black",
-                                                fontWeight: "700",
-                                                textTransform:"capitalize",
+  <TableContainer>
+  { loading ? (
+       <LinearProgress style={{backgroundColor:  "gold"}}/>
+     ) : (
+      <Table>
+       <TableHead style = {{backgroundColor: "#EEBC1d"}}>
+        <TableRow>
+         {["Койн", "Үнэ", "24 цагийн өөрчлөлт ", "Зах зээлийн үнэлгээ"].map((head)=>(
+          <TableCell
+          style={{
+          color:"black",
+          fontWeight: "700",
+        //   textTransform:"capitalize",
+          //fontWeight: "bold",
+          fontFamily: "Montserrat",
+                }}
+           key={head}
+           align={head === "Койн" ? "left" : "right"}
+          >
+           {head}
+        </TableCell>
+              ))}
+          </TableRow>
+         </TableHead>
+           <TableBody>
+              {handleSearch().map((row) => {
+              const profit=row.price_change_percentage_24h > 0;
 
-                                                //fontWeight: "bold",
-                                                fontFamily: "Montserrat",
-                                            }}
-                                            key={head}
-                                            align={head === "Coin" ? "" : "right"}
-                                            >
-                                                {head}
-                                            </TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                        </Table>
-                    )
-                }
-            </TableContainer>
+              return (
+                  <TableRow hover
+                    onClick={() => history.push(`/coin/${row.id}`)}
+                    className={classes.row}
+                    key= {row.name}
+                    >
+                     <TableCell 
+                     component="th"
+                     scope="row"
+                     styles={{
+                         display:"flex",
+                         gap: 15,
+                     }}
+                     >
+                       <img 
+                         src={row?.image}
+                         alt={row.name}
+                         height="50"
+                         style={{ marginBottom: 10 }}
+                         />
+                         <div
+                            style={{display: "flex", flexDirection:"column"}}
+                         >
+                          <span 
+                            style={{
+                                textTransform:"uppercase",
+                                fontSize:22,
+                            }}
+                            >
+                              {row.symbol}
+                          </span>
+                            <span style={{color:"darkgrey"}}>{row.name}</span>
+                            </div>
+                     </TableCell>
+                     <TableCell align="right">
+
+                        {/* // align="right"
+                        // style={{
+                        //     color: profit > 0 ? "rgb(14, 203, 129)" : "red",
+                        //     fontWeight: 500,
+                        // }}
+                        // >
+                        //     {profit && "+"}
+                        //     {row.price_change_percentage_24h.toFixed(2)}% */}
+                         
+                             {symbol}{" "}
+                             {numberWithCommas(row.current_price.toFixed(2))}   
+
+                     </TableCell>
+                     <TableCell
+                        align="right"
+                        style={{
+                            color: profit > 0 ? "rgb(14,203,129)" : "red",
+                            fontWeight: 500,
+                        }}
+                        >
+                            {profit && "+"}
+                            {row.price_change_percentage_24h.toFixed(2)}%
+                     </TableCell>
+                     <TableCell align='right'>
+                         {symbol}{" "}
+                         {numberWithCommas(
+                             row.market_cap.toString().slice(0, -6)
+                         )}
+                            M
+                     </TableCell>
+                    </TableRow>
+              )
+           })}</TableBody>
+       </Table>
+     )
+  }
+  </TableContainer>
         </Container>
         </ThemeProvider>
+  )
   
 };
 
