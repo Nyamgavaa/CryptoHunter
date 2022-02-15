@@ -1,13 +1,29 @@
-import { Container, createTheme, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography } from '@material-ui/core';
-import axios from 'axios';
-import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
-import {useState} from "react";
-//import { Classnames } from 'react-alice-carousel';
-import { CoinList } from '../config/api';
-import { CryptoState } from '../CryptoContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Pagination from "@material-ui/lab/Pagination";
+import {
+  Container,
+  createTheme,
+  TableCell,
+  LinearProgress,
+  ThemeProvider,
+  Typography,
+  TextField,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableContainer,
+  Table,
+  Paper,
+} from "@material-ui/core";
+import axios from "axios";
+import { CoinList } from "../config/api";
+import { useNavigate } from "react-router-dom";
+import { CryptoState } from "../CryptoContext";
 import {numberWithCommas} from '../Pages/Carousel'
+//import {Pagination} from "@material-ui/lab/Pagination";
+//import Pagination from "@material-ui/lab/Pagination";
+
 //useHistory react-router-dom v6 дээр өөрчлөгдөж useNavigate болсохн
 const CoinTable = () => {
 
@@ -15,6 +31,7 @@ const [coins, setCoins] = useState([]);
 const [loading, setLoading] = useState(false);
 const [search, setSearch] = useState("")
 const history = useNavigate()
+const [page, setPage] = useState(1)
 const {currency,symbol} = CryptoState();
 
 
@@ -39,7 +56,10 @@ const {currency,symbol} = CryptoState();
     const darkTheme = createTheme({
         palette: {
             primary:{
-                main: "#FFD700"
+                main: "#FFD700",
+                "&:hover": {
+                    backgroundColor: "#ffc107",
+                    },
             
 
             },
@@ -57,19 +77,43 @@ const {currency,symbol} = CryptoState();
 
     const useStyles = makeStyles(() => ({
         row: {
-            backgroundColor: "#3c3",
+            backgroundColor: "#16171a",
             cursor: "pointer",
             "&:hover": {
             backgroundColor: "#131111",
             },
             fontFamily: "Montserrat",
-
+            },
+         pagination: {
+                "& .MuiPaginationItem-root": {
+                  color: "black",
+                  
+                },
+            },
+        root: {
+            
+            position:"relative",
+            bottom:0,
+            zIndex:200,
+            backgroundColor:"gold",
+           // padding:"0px 20px",
+            color: "black",
+            width:"100%",
+            "&:hover": {
+                backgroundColor: "#ffc107",
+                },
         },
+        container: {
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "black"
+        }
     }));
 
   //  const useStyles = makeStyles(() => ({}));
 
-    const classes = useStyles;
+    const classes = useStyles();
 
   return ( 
         <ThemeProvider theme= {darkTheme}>
@@ -110,7 +154,9 @@ const {currency,symbol} = CryptoState();
           </TableRow>
          </TableHead>
            <TableBody>
-              {handleSearch().map((row) => {
+              {handleSearch()
+              .slice((page - 1)* 10,(page-1) * 10 + 10)
+              .map((row) => {
               const profit=row.price_change_percentage_24h > 0;
 
               return (
@@ -186,6 +232,30 @@ const {currency,symbol} = CryptoState();
      )
   }
   </TableContainer>
+       <div className={classes.container}>
+           <div className={classes.root}>
+        <Pagination 
+        style={{
+            padding: 20,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            shape: 'round',
+        }}
+        variant="outlined"
+        shape="rounded"
+        color="secondary"
+        classes={{ul: classes.pagination }}
+        //count={(handleSearch()?.length/10).toFixed(0)}
+        count={(handleSearch()?.length/10)}
+       onChange={(_, value) => {
+           setPage(value);
+           window.scroll(0,450);
+       }}
+        />
+        </div>
+        </div>
+
         </Container>
         </ThemeProvider>
   )
