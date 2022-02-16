@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     
 }));
 
-export function numberWidthCommas(x) {
+export function numberWithCommas(x) {
     // return x.toString().replace(/\B(?=(\d{3}) +(?!\d))/g, ",");
     return x.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 }
@@ -80,7 +80,7 @@ const fetchTrendingCoins = async () =>{
                     </span>
 
                     <span style={{fontSize:22, fontWeight:500}}>
-                        {symbol} {numberWidthCommas(coin?.current_price.toFixed(2))}
+                        {symbol} {numberWithCommas(coin?.current_price.toFixed(2))}
                     </span>
             </Link> 
         
