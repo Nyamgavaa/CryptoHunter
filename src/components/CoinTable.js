@@ -30,7 +30,7 @@ const CoinTable = () => {
 const [coins, setCoins] = useState([]);
 const [loading, setLoading] = useState(false);
 const [search, setSearch] = useState("")
-const history = useNavigate()
+const nav = useNavigate()
 const [page, setPage] = useState(1)
 const {currency,symbol} = CryptoState();
 
@@ -161,7 +161,7 @@ const {currency,symbol} = CryptoState();
 
               return (
                   <TableRow hover
-                    onClick={() => history.push(`/coin/${row.id}`)}
+                    onClick={() => nav(`/coins/${row.id}`)}
                     className={classes.row}
                     key= {row.name}
                     >
