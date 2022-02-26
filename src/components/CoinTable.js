@@ -14,7 +14,6 @@ import {
   TableHead,
   TableContainer,
   Table,
-  Paper,
 } from "@material-ui/core";
 import axios from "axios";
 import { CoinList } from "../config/api";
@@ -50,7 +49,7 @@ const {currency,symbol} = CryptoState();
     console.log(coins);
     useEffect(() => {
         fetchCoins();
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[currency])
     
     const darkTheme = createTheme({
