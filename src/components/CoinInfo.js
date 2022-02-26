@@ -8,7 +8,9 @@ import { CircularProgress,
          ThemeProvider,
    } from '@material-ui/core';
 
-import {Line} from "react-chartjs-2"
+import {Line, } from "react-chartjs-2"
+import { chartDays } from '../config/data';
+import SelectButton from './SelectButton';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
@@ -84,7 +86,6 @@ const darkTheme = createTheme({
             />
           ): (
           <>
-          {/* <button onClick={console.log([`this is log ${historicData}`])}>pass console log</button> */}
              <Line 
               data={{ 
                 labels: historicData.map((coin) => { 
@@ -102,12 +103,38 @@ const darkTheme = createTheme({
                   data: historicData.map((coin) => coin[1]),
                   label: `Price ( Past ${days} Days) in ${currency}`,
                   borderColor: "#EEBC1D",
-                  borderWidth: 1
 
-                }
-              ]
+                },
+              ],
              }} 
+             options={{
+               elements: {
+                 point: {
+                   radius: 1,
+                 },
+               },
+             }}
              /> 
+             <div
+               style={{
+                 display: "flex",
+                 marginTop: 20,
+                 justifyContent: "space-around",
+                 width: "100%",
+               }}
+               >
+               {chartDays.map((day)=> (
+                // <div className='button' key={pos}>
+                 <SelectButton
+                  key={day.value}
+                  onClick={() => setDays(day.value)}
+                  selected={day.value ===days}
+                 >
+                   {day.label}
+                 </SelectButton>
+                 //</div>
+               ))}
+             </div>
           </>)
           
         }

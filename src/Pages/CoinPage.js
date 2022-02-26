@@ -111,7 +111,7 @@ const CoinPage = () => {
       <div className={classes.marketData}>
         <span style={{display: "flex"}}>
           <Typography variant="h5" className={classes.heading}>
-            Rank:
+            Зэрэглэл:
           </Typography>
           &nbsp; &nbsp;
           <Typography
@@ -125,7 +125,7 @@ const CoinPage = () => {
         </span>
         <span style={{display: "flex"}}>
           <Typography variant="h5" className={classes.heading}>
-            Current Price
+            Одоогийн Ханш
           </Typography>
           &nbsp; &nbsp;
           <Typography
@@ -141,7 +141,7 @@ const CoinPage = () => {
           </Typography>
         </span><span style={{display: "flex"}}>
           <Typography variant="h5" className={classes.heading}>
-            Market Cap: {" "}
+            Зах Зээлийн үнэлгээ: {" "}
           </Typography>
           &nbsp; &nbsp;
           <Typography

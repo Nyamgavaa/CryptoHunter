@@ -53,7 +53,7 @@ const Header = () => {
           <Typography 
           onClick={() => navigate('/')} 
           className={classes.title}>
-          Crypto Hunter
+          Nomadic Crypto 
             </Typography>
           <Select
             variant="outlined"
