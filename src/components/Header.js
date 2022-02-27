@@ -17,13 +17,19 @@ import { useNavigate} from "react-router-dom"; //In react-router-dom v6 useHisto
 import { CryptoState } from '../CryptoContext';
 
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   title: {
     flex:1,
     color:"gold",
     fontFamily: "Montserrat",
     fontWeight: "bold",
     cursor: "pointer",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+      marginTop: 0,
+      padding: 20,
+      paddingTop: 0,
+    },
   },
 }));
 
@@ -53,7 +59,7 @@ const Header = () => {
           <Typography 
           onClick={() => navigate('/')} 
           className={classes.title}>
-          Nomadic Crypto 
+          Crypto Nomadic  
             </Typography>
           <Select
             variant="outlined"
@@ -78,7 +84,6 @@ const Header = () => {
 
     </AppBar>
     </ThemeProvider>
-    <h1>Header</h1>
   </div>; 
 };
 
